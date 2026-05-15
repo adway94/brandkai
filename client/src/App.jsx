@@ -30,10 +30,21 @@ export default function App() {
     Object.entries(context).forEach(([k, v]) => formData.append(k, v))
 
     try {
-      const { data } = await axios.post('/api/analyze', formData)
-      setResult(data)
+      const { data: { job_id } } = await axios.post('/api/analyze', formData)
+
+      // Poll until done
+      while (true) {
+        await new Promise(r => setTimeout(r, 3000))
+        const { data } = await axios.get(`/api/result/${job_id}`)
+        if (data.status === 'done') {
+          setResult(data.result)
+          break
+        }
+      }
     } catch (err) {
-      setError(err.response?.data?.error || 'Error al conectar con el servidor')
+      const detail = err.response?.data?.detail
+      const msg = typeof detail === 'object' ? detail?.error : detail
+      setError(msg || err.response?.data?.error || 'Error al analizar. Intentá de nuevo en unos segundos.')
     } finally {
       setLoading(false)
     }
@@ -69,7 +80,7 @@ export default function App() {
         {loading && (
           <div style={styles.loadingBox}>
             <div style={styles.spinner} />
-            <p style={styles.loadingText}>Claude está analizando tu creatividad...</p>
+            <p style={styles.loadingText}>Analizando tu creatividad...</p>
           </div>
         )}
 

@@ -12,6 +12,10 @@ export default defineConfig({
         target: 'http://backend:5000',
         changeOrigin: true,
       },
+      '/image': {
+        target: 'http://backend:5000',
+        changeOrigin: true,
+      },
     },
   },
 })

@@ -7,5 +7,6 @@ dependencies = [
     "uvicorn[standard]>=0.34",
     "python-multipart>=0.0.20",
     "anthropic>=0.52",
+    "httpx>=0.28",
     "python-dotenv>=1.0",
 ]

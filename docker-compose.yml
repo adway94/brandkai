@@ -1,11 +1,12 @@
 services:
   backend:
     build: ./server
-    ports:
-      - "5000:5000"
+    expose:
+      - "5000"
     volumes:
       - ./server:/app
       - /app/.venv
+      - uploads:/app/uploads
     env_file: .env
     restart: unless-stopped
 
@@ -19,3 +20,6 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+
+volumes:
+  uploads:

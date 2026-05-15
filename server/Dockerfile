@@ -11,4 +11,4 @@ COPY . .
 
 ENV PYTHONUNBUFFERED=1
 
-CMD [".venv/bin/uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
+CMD [".venv/bin/uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]

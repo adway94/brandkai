@@ -18,9 +18,29 @@ function scoreColor(score) {
 
 export default function AnalysisResult({ result, imagePreview }) {
   const color = scoreColor(result.score_general)
+  const rechazada = result.veredicto === 'rechazada'
+  const alertas = result.alertas_criticas || []
 
   return (
     <div style={styles.container}>
+
+      {/* Veredicto banner */}
+      <div style={{ ...styles.veredicto, background: rechazada ? '#2d0f0f' : '#0f2d1a', borderColor: rechazada ? '#f87171' : '#4ade80' }}>
+        <span style={{ ...styles.veredictoIcon }}>
+          {rechazada ? '✕' : '✓'}
+        </span>
+        <div>
+          <p style={{ ...styles.veredictoLabel, color: rechazada ? '#f87171' : '#4ade80' }}>
+            {rechazada ? 'RECHAZADA' : 'APROBADA'}
+          </p>
+          {alertas.length > 0 && (
+            <ul style={styles.alertasList}>
+              {alertas.map((a, i) => <li key={i} style={styles.alertaItem}>{a}</li>)}
+            </ul>
+          )}
+        </div>
+      </div>
+
       <div style={styles.topRow}>
         {imagePreview && (
           <img src={imagePreview} alt="Ad analizado" style={styles.thumbImg} />
@@ -70,6 +90,34 @@ const styles = {
     gap: 20,
     borderTop: '1px solid #2a2a2a',
     paddingTop: 28,
+  },
+  veredicto: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: 14,
+    border: '1px solid',
+    borderRadius: 12,
+    padding: '14px 18px',
+  },
+  veredictoIcon: {
+    fontSize: 22,
+    fontWeight: 900,
+    lineHeight: 1,
+    marginTop: 2,
+  },
+  veredictoLabel: {
+    fontSize: 18,
+    fontWeight: 900,
+    letterSpacing: 1,
+  },
+  alertasList: {
+    margin: '6px 0 0 0',
+    padding: '0 0 0 16px',
+  },
+  alertaItem: {
+    color: '#fca5a5',
+    fontSize: 13,
+    lineHeight: 1.5,
   },
   topRow: {
     display: 'grid',
